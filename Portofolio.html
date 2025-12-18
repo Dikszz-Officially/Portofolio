@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTOFOLIO | DIKSZZ OFFICIALLY</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #030303;
+            --accent: #00f2ff;
+            --accent-2: #7000ff;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-glow: 0 0 15px rgba(0, 242, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; background-image: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #030303 100%); }
+
+        /* --- HEADER --- */
+        .main-header { padding: 80px 40px 40px 100px; text-align: left; }
+        .header-top { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 12px; color: rgba(255,255,255,0.3); margin-bottom: 5px; }
+        .header-bottom { font-family: 'Orbitron'; font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 900; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(var(--text-glow)); }
+
+        /* --- CHAT AI TOGGLE (V27 STYLE) --- */
+        .chat-toggle {
+            position: fixed; top: 25px; right: 25px; z-index: 5500;
+            width: 55px; height: 55px; border-radius: 16px;
+            background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--accent); font-size: 1.4rem;
+            box-shadow: var(--text-glow); transition: 0.3s;
+        }
+        .chat-toggle:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--accent); }
+
+        /* --- AI WINDOW (V27 STYLE) --- */
+        .ai-window {
+            position: fixed; top: 95px; right: 25px; z-index: 5400;
+            width: 350px; height: 520px; background: rgba(8, 8, 8, 0.98);
+            border: 1px solid var(--border); border-radius: 28px;
+            display: none; flex-direction: column; overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9); backdrop-filter: blur(25px);
+            animation: slideUp 0.4s ease-out;
+        }
+        .ai-window.active { display: flex; }
+        .ai-header { padding: 22px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--accent); }
+        .status-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); }
+
+        /* --- SIDEBAR NAV --- */
+        .nav-trigger { position: fixed; top: 25px; left: 25px; z-index: 5500; background: rgba(15, 15, 15, 0.9); border: 1px solid var(--border); width: 55px; height: 55px; border-radius: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .sidebar-menu { position: fixed; top: 0; left: -340px; width: 320px; height: 100vh; background: #080808; z-index: 5000; padding: 100px 25px; border-right: 1px solid var(--border); transition: 0.5s ease; }
+        .sidebar-menu.active { left: 0; }
+        .social-btn { height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); color: #fff; text-decoration: none; font-size: 1.3rem; transition: 0.3s; border: 1px solid var(--border); }
+        .social-btn:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+        /* --- BENTO CONTAINER --- */
+        .container { padding: 0 40px 80px 100px; max-width: 1400px; margin: 0 auto; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 170px; gap: 20px; }
+        
+        .profile-card { grid-column: span 2; grid-row: span 2; background: var(--card-bg); border: 1px solid var(--border); border-radius: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .pfp-wrap { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--accent); padding: 7px; margin-bottom: 20px; box-shadow: var(--text-glow); overflow: hidden; }
+        .pfp-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        .skill-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; }
+        .skill-card i { font-size: 2.5rem; margin-bottom: 10px; }
+        .skill-card span { font-family: 'Orbitron'; font-size: 0.7rem; font-weight: 800; }
+
+        /* Skill Colors */
+        .html i { color: #E34F26; } .css i { color: #1572B6; } .js i { color: #F7DF1E; }
+        .node i { color: #339933; } .cpp i { color: #00599C; } .python i { color: #3776AB; }
+
+        .chat-view { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scrollbar-width: none; }
+        .msg { max-width: 85%; padding: 12px; border-radius: 15px; font-size: 0.85rem; }
+        .bot { background: rgba(255,255,255,0.06); align-self: flex-start; }
+        .user { background: var(--accent-2); align-self: flex-end; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 20px; }
+            .main-header { padding: 100px 20px 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-trigger" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i></div>
+
+    <div class="chat-toggle" onclick="toggleChat()"><i class="fas fa-robot" id="chatIcon"></i></div>
+
+    <div class="sidebar-menu" id="sideMenu">
+        <p style="font-family:'Orbitron'; font-size:0.6rem; color:#444; margin-bottom:15px; letter-spacing:2px;">AUDIO SYSTEM</p>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:20px; padding:15px; margin-bottom:30px;">
+            <p style="font-size:0.8rem; font-weight:800;">Melodi</p>
+            <audio controls style="width:100%; height:30px; filter:invert(1); margin-top:10px;">
+                <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3">
+            </audio>
+        </div>
+
+        <p style="font-family:'Orbitron'; font-size:0.6rem; color:#444; margin-bottom:15px; letter-spacing:2px;">SOCIAL MEDIA</p>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
+            <a href="https://instagram.com/dikszz" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+            <a href="https://tiktok.com/@dikszz" target="_blank" class="social-btn"><i class="fab fa-tiktok"></i></a>
+            <a href="https://t.me/dikszz" target="_blank" class="social-btn"><i class="fab fa-telegram"></i></a>
+            <a href="https://wa.me/628123456789" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <div class="ai-window" id="aiWindow">
+        <div class="ai-header"><div class="status-dot"></div> <span>Chai Ai V2 Dikszz</span></div>
+        <div class="chat-view" id="chatBox">
+            <div class="msg bot">Maaf sistem sedang dalam pengembangan🙏</div>
+        </div>
+        <div style="padding:15px; display:flex; gap:10px; border-top:1px solid var(--border);">
+            <input type="text" id="aiInp" placeholder="Tanya sesuatu..." style="flex:1; background:#000; border:1px solid var(--border); border-radius:10px; color:#fff; padding:10px;" onkeypress="if(event.key==='Enter') chat()">
+            <button onclick="chat()" style="background:none; border:none; color:var(--accent); cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="header-top">PORTOFOLIO</div>
+        <div class="header-bottom">DIKSZZ OFFICIALLY</div>
+    </header>
+
+    <div class="container">
+        <main class="bento-grid">
+            <div class="profile-card">
+                <div class="pfp-wrap">
+                    <img src="" alt="Dikszz Profil">
+                </div>
+                <h2 style="font-family:'Orbitron'; letter-spacing:2px;">DIKSZZ OFFICIAL</h2>
+                <p style="color:var(--accent); font-weight:800; font-size:0.75rem; letter-spacing:1px;">SYSTEM ENGINEER</p>
+            </div>
+
+            <div class="skill-card html"><i class="fab fa-html5"></i><span>HTML5</span></div>
+            <div class="skill-card css"><i class="fab fa-css3-alt"></i><span>CSS3</span></div>
+            <div class="skill-card js"><i class="fab fa-js"></i><span>JAVASCRIPT</span></div>
+            <div class="skill-card node"><i class="fab fa-node-js"></i><span>NODE.JS</span></div>
+            <div class="skill-card cpp"><i class="fas fa-code"></i><span>C++</span></div>
+            <div class="skill-card python"><i class="fab fa-python"></i><span>PYTHON</span></div>
+        </main>
+    </div>
+
+    <script>
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
+        function toggleChat() {
+            const win = document.getElementById('aiWindow');
+            const icon = document.getElementById('chatIcon');
+            win.classList.toggle('active');
+            icon.className = win.classList.contains('active') ? "fas fa-times" : "fas fa-robot";
+        }
+        function chat() {
+            const inp = document.getElementById('aiInp');
+            const box = document.getElementById('chatBox');
+            if(!inp.value.trim()) return;
+            box.innerHTML += `<div class="msg user">${inp.value}</div>`;
+            inp.value = '';
+            box.scrollTop = box.scrollHeight;
+            setTimeout(() => {
+                box.innerHTML += `<div class="msg bot">Sistem Chai Ai V2 merespons dengan baik.</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>
